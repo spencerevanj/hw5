@@ -68,6 +68,56 @@ function renderRides(ridesArray) {
 }
 
 window.addEventListener('DOMContentLoaded', function() {
-  // YOUR CODE
+console.log()
+  let allRidesButtons = document.querySelectorAll('.filter-button')
+
+  // loop through each ride button
+  for (let i = 0; i < allRidesButtons.length; i++) {
+    let ridesButton = allRidesButtons[i];
+    
+    ridesButton.addEventListener('click', async function(event) {
+      event.preventDefault()
+
+      let response = await fetch(`https://kiei451.com/api/rides.json`)
+      let json = await response.json()
+      let poolArray = []
+      let purpleArray = []
+      let xlArray = []
+      let xArray = []
+      let location = event.target.innerHTML
+      console.log(event.target.innerHTML)
+      document.querySelector('.rides').innerHTML = ''
+
+      for (let i = 0; i < json.length; i++) {
+        let ride = json[i]
+        if (levelOfService(ride) == 'Noober Pool') {
+          poolArray.push(ride)
+        } else if (levelOfService(ride) == 'Noober Purple') {
+          purpleArray.push(ride)
+        } else if (levelOfService(ride) == 'Noober XL') {
+          xlArray.push(ride)
+        } else {
+          xArray.push(ride)
+        }
+      }
+      
+      // console.log('poolArray:', poolArray)
+      // console.log('purpleArray:', purpleArray)
+      // console.log('xlArray:', xlArray)
+      // console.log('xArray:', xArray)
+
+      if (location == 'All Rides') {
+        document.querySelector(`.rides`).insertAdjacentHTML(`beforeend`, renderRides(json))
+      } else if (location == 'Noober Pool') {
+        document.querySelector(`.rides`).insertAdjacentHTML(`beforeend`, renderRides(poolArray))
+      } else if (location == 'Noober Purple') {
+        document.querySelector(`.rides`).insertAdjacentHTML(`beforeend`, renderRides(purpleArray))
+      } else if (location == 'Noober XL') {
+        document.querySelector(`.rides`).insertAdjacentHTML(`beforeend`, renderRides(xlArray))
+      } else {
+        document.querySelector(`.rides`).insertAdjacentHTML(`beforeend`, renderRides(xArray))
+      }
+    })
+  }
 })
 
